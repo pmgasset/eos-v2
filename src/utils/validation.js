@@ -19,7 +19,11 @@ export const validateForm = (type, data) => {
       }
     },
     issue: {
-      title: (value) => !value && 'Issue title is required',
+      title: (value) => {
+        if (!value) return 'Issue title is required';
+        if (value.length < 5) return 'Issue title must be at least 5 characters';
+        return null;
+      },
       priority: (value) => !value && 'Priority is required'
     },
     person: {
