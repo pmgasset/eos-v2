@@ -53,13 +53,19 @@ export const EOSProvider = ({ children }) => {
 
       // Process responses and handle any failures gracefully
       const loadedData = {
-        metrics: metricsResponse.status === 'fulfilled' ? metricsResponse.value.data || [] : [],
-        rocks: rocksResponse.status === 'fulfilled' ? rocksResponse.value.data || [] : [],
-        issues: issuesResponse.status === 'fulfilled' ? issuesResponse.value.data || [] : [],
-        people: peopleResponse.status === 'fulfilled' ? peopleResponse.value.data || [] : [],
-        meetings: meetingsResponse.status === 'fulfilled' ? meetingsResponse.value.data || [] : [],
-        todos: todosResponse.status === 'fulfilled' ? todosResponse.value.data || [] : [],
-        visionData: visionResponse.status === 'fulfilled' ? 
+        metrics: metricsResponse.status === 'fulfilled' && metricsResponse.value.success ? 
+          metricsResponse.value.data || [] : [],
+        rocks: rocksResponse.status === 'fulfilled' && rocksResponse.value.success ? 
+          rocksResponse.value.data || [] : [],
+        issues: issuesResponse.status === 'fulfilled' && issuesResponse.value.success ? 
+          issuesResponse.value.data || [] : [],
+        people: peopleResponse.status === 'fulfilled' && peopleResponse.value.success ? 
+          peopleResponse.value.data || [] : [],
+        meetings: meetingsResponse.status === 'fulfilled' && meetingsResponse.value.success ? 
+          meetingsResponse.value.data || [] : [],
+        todos: todosResponse.status === 'fulfilled' && todosResponse.value.success ? 
+          todosResponse.value.data || [] : [],
+        visionData: visionResponse.status === 'fulfilled' && visionResponse.value.success ? 
           visionResponse.value.data || initialState.visionData : 
           initialState.visionData
       };
@@ -99,12 +105,16 @@ export const EOSProvider = ({ children }) => {
       // Call D1 API
       const response = await api.createItem(type, data);
       
-      // Update local state with the returned data (includes server-generated ID)
-      const newItem = response.data || { ...data, id: response.id || Date.now().toString() };
-      dispatch({ type: 'ADD_ITEM', payload: { type, item: newItem } });
-      
-      showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} created successfully!`, 'success');
-      return { success: true, data: newItem };
+      if (response.success) {
+        // Update local state with the returned data (includes server-generated ID)
+        const newItem = response.data || { ...data, id: response.id || Date.now().toString() };
+        dispatch({ type: 'ADD_ITEM', payload: { type, item: newItem } });
+        
+        showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} created successfully!`, 'success');
+        return { success: true, data: newItem };
+      } else {
+        throw new Error(response.error || 'Failed to create item');
+      }
       
     } catch (error) {
       console.error(`Failed to create ${type}:`, error);
@@ -128,12 +138,16 @@ export const EOSProvider = ({ children }) => {
       // Call D1 API
       const response = await api.updateItem(type, id, data);
       
-      // Update local state
-      const updatedItem = response.data || { ...data, id };
-      dispatch({ type: 'UPDATE_ITEM', payload: { type, id, item: updatedItem } });
-      
-      showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully!`, 'success');
-      return { success: true, data: updatedItem };
+      if (response.success) {
+        // Update local state
+        const updatedItem = response.data || { ...data, id };
+        dispatch({ type: 'UPDATE_ITEM', payload: { type, id, item: updatedItem } });
+        
+        showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully!`, 'success');
+        return { success: true, data: updatedItem };
+      } else {
+        throw new Error(response.error || 'Failed to update item');
+      }
       
     } catch (error) {
       console.error(`Failed to update ${type}:`, error);
@@ -154,13 +168,17 @@ export const EOSProvider = ({ children }) => {
       dispatch({ type: 'SET_LOADING', payload: true });
       
       // Call D1 API
-      await api.deleteItem(type, id);
+      const response = await api.deleteItem(type, id);
       
-      // Update local state
-      dispatch({ type: 'DELETE_ITEM', payload: { type, id } });
-      
-      showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
-      return { success: true };
+      if (response.success) {
+        // Update local state
+        dispatch({ type: 'DELETE_ITEM', payload: { type, id } });
+        
+        showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully!`, 'success');
+        return { success: true };
+      } else {
+        throw new Error(response.error || 'Failed to delete item');
+      }
       
     } catch (error) {
       console.error(`Failed to delete ${type}:`, error);

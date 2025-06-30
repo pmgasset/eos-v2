@@ -25,58 +25,220 @@ const apiCall = async (endpoint, options = {}) => {
   }
 };
 
+// Field mapping functions to convert between frontend and backend formats
+const mapMetricToBackend = (metric) => ({
+  name: metric.name,
+  goal: metric.goal,
+  current_value: metric.actual,
+  status: metric.actual && metric.goal ? 
+    (metric.actual >= metric.goal ? 'on-track' : 'behind') : 'unknown',
+  owner: metric.owner
+});
+
+const mapMetricFromBackend = (metric) => ({
+  id: metric.id,
+  name: metric.name,
+  goal: metric.goal,
+  actual: metric.current_value,
+  status: metric.status,
+  owner: metric.owner,
+  description: metric.description || '',
+  frequency: metric.frequency || 'weekly'
+});
+
+const mapRockToBackend = (rock) => ({
+  title: rock.title,
+  description: rock.description || '',
+  owner: rock.owner,
+  due_date: rock.dueDate,
+  progress: rock.progress || 0
+});
+
+const mapRockFromBackend = (rock) => ({
+  id: rock.id,
+  title: rock.title,
+  description: rock.description,
+  owner: rock.owner,
+  dueDate: rock.due_date,
+  priority: rock.priority || 'medium',
+  progress: rock.progress
+});
+
+const mapIssueToBackend = (issue) => ({
+  title: issue.title,
+  description: issue.description || '',
+  priority: issue.priority,
+  assignee: issue.owner || '',
+  status: issue.status || 'identified'
+});
+
+const mapIssueFromBackend = (issue) => ({
+  id: issue.id,
+  title: issue.title,
+  description: issue.description,
+  priority: issue.priority,
+  owner: issue.assignee,
+  status: issue.status,
+  relatedRock: issue.related_rock || '',
+  category: issue.category || 'general',
+  createdDate: issue.created_at,
+  resolvedDate: issue.resolved_at
+});
+
+const mapPersonToBackend = (person) => ({
+  name: person.name,
+  role: person.role,
+  seat: person.seat,
+  department: person.department || '',
+  get_it: person.getIt || false,
+  want_it: person.wantIt || false,
+  capacity: person.capacity || false
+});
+
+const mapPersonFromBackend = (person) => ({
+  id: person.id,
+  name: person.name,
+  role: person.role,
+  seat: person.seat,
+  department: person.department,
+  getIt: person.get_it,
+  wantIt: person.want_it,
+  capacity: person.capacity
+});
+
 // Metrics API
-export const getMetrics = () => apiCall('/metrics');
-export const createMetric = (data) => apiCall('/metrics', {
-  method: 'POST',
-  body: JSON.stringify(data)
-});
-export const updateMetric = (id, data) => apiCall(`/metrics/${id}`, {
-  method: 'PUT',
-  body: JSON.stringify(data)
-});
+export const getMetrics = async () => {
+  const response = await apiCall('/metrics');
+  return {
+    ...response,
+    data: response.data.map(mapMetricFromBackend)
+  };
+};
+
+export const createMetric = async (data) => {
+  const mappedData = mapMetricToBackend(data);
+  const response = await apiCall('/metrics', {
+    method: 'POST',
+    body: JSON.stringify(mappedData)
+  });
+  
+  // Return the created metric with the ID
+  return {
+    ...response,
+    data: { ...data, id: response.id }
+  };
+};
+
+export const updateMetric = async (id, data) => {
+  const mappedData = mapMetricToBackend(data);
+  return await apiCall(`/metrics/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(mappedData)
+  });
+};
+
 export const deleteMetric = (id) => apiCall(`/metrics/${id}`, {
   method: 'DELETE'
 });
 
 // Rocks API
-export const getRocks = () => apiCall('/rocks');
-export const createRock = (data) => apiCall('/rocks', {
-  method: 'POST',
-  body: JSON.stringify(data)
-});
-export const updateRock = (id, data) => apiCall(`/rocks/${id}`, {
-  method: 'PUT',
-  body: JSON.stringify(data)
-});
+export const getRocks = async () => {
+  const response = await apiCall('/rocks');
+  return {
+    ...response,
+    data: response.data.map(mapRockFromBackend)
+  };
+};
+
+export const createRock = async (data) => {
+  const mappedData = mapRockToBackend(data);
+  const response = await apiCall('/rocks', {
+    method: 'POST',
+    body: JSON.stringify(mappedData)
+  });
+  
+  return {
+    ...response,
+    data: { ...data, id: response.id }
+  };
+};
+
+export const updateRock = async (id, data) => {
+  const mappedData = mapRockToBackend(data);
+  return await apiCall(`/rocks/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(mappedData)
+  });
+};
+
 export const deleteRock = (id) => apiCall(`/rocks/${id}`, {
   method: 'DELETE'
 });
 
 // Issues API
-export const getIssues = () => apiCall('/issues');
-export const createIssue = (data) => apiCall('/issues', {
-  method: 'POST',
-  body: JSON.stringify(data)
-});
-export const updateIssue = (id, data) => apiCall(`/issues/${id}`, {
-  method: 'PUT',
-  body: JSON.stringify(data)
-});
+export const getIssues = async () => {
+  const response = await apiCall('/issues');
+  return {
+    ...response,
+    data: response.data.map(mapIssueFromBackend)
+  };
+};
+
+export const createIssue = async (data) => {
+  const mappedData = mapIssueToBackend(data);
+  const response = await apiCall('/issues', {
+    method: 'POST',
+    body: JSON.stringify(mappedData)
+  });
+  
+  return {
+    ...response,
+    data: { ...data, id: response.id }
+  };
+};
+
+export const updateIssue = async (id, data) => {
+  const mappedData = mapIssueToBackend(data);
+  return await apiCall(`/issues/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(mappedData)
+  });
+};
+
 export const deleteIssue = (id) => apiCall(`/issues/${id}`, {
   method: 'DELETE'
 });
 
 // People API
-export const getPeople = () => apiCall('/people');
-export const createPerson = (data) => apiCall('/people', {
-  method: 'POST',
-  body: JSON.stringify(data)
-});
-export const updatePerson = (id, data) => apiCall(`/people/${id}`, {
-  method: 'PUT',
-  body: JSON.stringify(data)
-});
+export const getPeople = async () => {
+  const response = await apiCall('/people');
+  return {
+    ...response,
+    data: response.data.map(mapPersonFromBackend)
+  };
+};
+
+export const createPerson = async (data) => {
+  const mappedData = mapPersonToBackend(data);
+  const response = await apiCall('/people', {
+    method: 'POST',
+    body: JSON.stringify(mappedData)
+  });
+  
+  return {
+    ...response,
+    data: { ...data, id: response.id }
+  };
+};
+
+export const updatePerson = async (id, data) => {
+  const mappedData = mapPersonToBackend(data);
+  return await apiCall(`/people/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(mappedData)
+  });
+};
+
 export const deletePerson = (id) => apiCall(`/people/${id}`, {
   method: 'DELETE'
 });
@@ -116,7 +278,7 @@ export const updateVision = (data) => apiCall('/vision', {
   body: JSON.stringify(data)
 });
 
-// Generic CRUD operations
+// Generic CRUD operations with field mapping
 export const createItem = async (type, data) => {
   const apiMap = {
     metric: createMetric,
