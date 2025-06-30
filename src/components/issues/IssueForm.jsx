@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useEOS } from '../../context/EOSContext';
 import { validateForm } from '../../utils/validation';
 
-const IssueForm = ({ initialData = {}, onClose }) => {
+const IssueForm = ({ initialData, onClose }) => {
   const { createItem, updateItem, rocks } = useEOS();
   const [formData, setFormData] = useState({
     title: '',
@@ -56,10 +56,10 @@ const IssueForm = ({ initialData = {}, onClose }) => {
     try {
       const issueData = {
         ...formData,
-        createdDate: initialData.createdDate || new Date().toISOString(),
-        resolvedDate: formData.status === 'solved' && !initialData.resolvedDate 
+        createdDate: (initialData && initialData.createdDate) || new Date().toISOString(),
+        resolvedDate: formData.status === 'solved' && (!initialData || !initialData.resolvedDate)
           ? new Date().toISOString() 
-          : initialData.resolvedDate || null
+          : (initialData && initialData.resolvedDate) || null
       };
 
       if (initialData && initialData.id) {
@@ -244,7 +244,7 @@ const IssueForm = ({ initialData = {}, onClose }) => {
           className="btn btn-primary" 
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Saving...' : (initialData?.id ? 'Update Issue' : 'Add Issue')}
+          {isSubmitting ? 'Saving...' : (initialData && initialData.id ? 'Update Issue' : 'Add Issue')}
         </button>
       </div>
     </form>
