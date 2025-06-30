@@ -384,4 +384,130 @@
   .notification {
     min-width: auto;
   }
+/* Additional CSS for Rocks functionality - Add to global.css */
+
+.status.completed { 
+  background: #e8f5e8; 
+  color: #4caf50; 
+}
+
+.status.overdue { 
+  background: #ffebee; 
+  color: #f44336; 
+  font-weight: bold;
+}
+
+.rocks-stats {
+  margin-bottom: 2rem;
+}
+
+.rocks-stats .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* Progress bar styling */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+/* Rock table specific styling */
+.eos-table td .progress-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eos-table td .progress-bar {
+  width: 60px;
+  margin: 0;
+}
+
+/* Quick progress buttons */
+.progress-buttons {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+.progress-buttons .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  min-width: auto;
+}
+
+/* Priority indicators */
+.priority-high { color: #f44336; }
+.priority-medium { color: #ff9800; }
+.priority-low { color: #4caf50; }
+
+/* Form enhancements for rocks */
+.rock-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.progress-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.progress-input-container input[type="range"] {
+  flex: 1;
+}
+
+.progress-input-container input[type="number"] {
+  width: 60px;
+}
+
+/* Days remaining styling */
+.days-remaining {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.days-remaining.overdue {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.days-remaining.urgent {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+/* Mobile responsiveness for rocks table */
+@media (max-width: 768px) {
+  .rocks-stats .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .rock-form .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .eos-table td .progress-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .progress-buttons {
+    justify-content: flex-start;
+  }
+
 }
