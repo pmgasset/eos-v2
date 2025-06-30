@@ -509,5 +509,260 @@
   .progress-buttons {
     justify-content: flex-start;
   }
+/* Additional CSS for People functionality - Add to global.css */
+
+/* People stats */
+.people-stats {
+  margin-bottom: 2rem;
+}
+
+.people-stats .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* GWC Matrix styling */
+.gwc-matrix {
+  margin-bottom: 2rem;
+}
+
+.gwc-category {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.gwc-category-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.gwc-category-count {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+.gwc-person-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: white;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  margin: 0.125rem;
+}
+
+/* GWC indicators in table */
+.gwc-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: help;
+}
+
+.gwc-indicators {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+/* Person status badges */
+.person-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.person-status.right-person-right-seat {
+  background-color: #e8f5e8;
+  color: #4caf50;
+  border-color: #4caf5040;
+}
+
+.person-status.right-person-wrong-seat {
+  background-color: #fff3e0;
+  color: #ff9800;
+  border-color: #ff980040;
+}
+
+.person-status.right-person {
+  background-color: #e3f2fd;
+  color: #2196f3;
+  border-color: #2196f340;
+}
+
+.person-status.wrong-person {
+  background-color: #ffebee;
+  color: #f44336;
+  border-color: #f4433640;
+}
+
+/* Person form enhancements */
+.person-form .gwc-assessment {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.person-form .gwc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.person-form .gwc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.person-form .gwc-item input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.person-form .gwc-description {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.person-form .gwc-status {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* Form grid layouts */
+.person-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Department and seat styling */
+.seat-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background-color: #f0f0f0;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.department-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background-color: #e3f2fd;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #1976d2;
+}
+
+/* Table enhancements for people */
+.eos-table .person-row {
+  transition: background-color 0.2s ease;
+}
+
+.eos-table .person-row:hover {
+  background-color: #f9f9f9;
+}
+
+.eos-table .person-row.right-person-right-seat {
+  border-left: 4px solid #4caf50;
+}
+
+.eos-table .person-row.right-person-wrong-seat {
+  border-left: 4px solid #ff9800;
+}
+
+.eos-table .person-row.wrong-person {
+  border-left: 4px solid #f44336;
+}
+
+/* Quick reference legend */
+.gwc-legend {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.gwc-legend h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.gwc-legend-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.gwc-legend-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.gwc-legend-title {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.gwc-legend-description {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* Responsive design for people components */
+@media (max-width: 768px) {
+  .people-stats .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .gwc-matrix {
+    grid-template-columns: 1fr;
+  }
+  
+  .person-form .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .person-form .gwc-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .gwc-legend-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .eos-table .person-actions {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 
 }
