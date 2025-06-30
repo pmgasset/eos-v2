@@ -10,7 +10,13 @@ export const validateForm = (type, data) => {
     rock: {
       title: (value) => !value && 'Rock title is required',
       owner: (value) => !value && 'Owner is required',
-      dueDate: (value) => !value && 'Due date is required'
+      dueDate: (value) => {
+        if (!value) return 'Due date is required';
+        const dueDate = new Date(value);
+        const now = new Date();
+        if (dueDate <= now) return 'Due date must be in the future';
+        return null;
+      }
     },
     issue: {
       title: (value) => !value && 'Issue title is required',
