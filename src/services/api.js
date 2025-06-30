@@ -29,7 +29,7 @@ const apiCall = async (endpoint, options = {}) => {
 const mapMetricToBackend = (metric) => ({
   name: metric.name,
   goal: metric.goal,
-  current_value: metric.actual,
+  current: metric.actual, // Backend expects 'current', not 'current_value'
   status: metric.actual && metric.goal ? 
     (metric.actual >= metric.goal ? 'on-track' : 'behind') : 'unknown',
   owner: metric.owner
@@ -39,7 +39,7 @@ const mapMetricFromBackend = (metric) => ({
   id: metric.id,
   name: metric.name,
   goal: metric.goal,
-  actual: metric.current_value,
+  actual: metric.current_value, // Database stores as current_value
   status: metric.status,
   owner: metric.owner,
   description: metric.description || '',
@@ -50,7 +50,7 @@ const mapRockToBackend = (rock) => ({
   title: rock.title,
   description: rock.description || '',
   owner: rock.owner,
-  due_date: rock.dueDate,
+  dueDate: rock.dueDate, // Backend expects dueDate, not due_date
   progress: rock.progress || 0
 });
 
@@ -59,7 +59,7 @@ const mapRockFromBackend = (rock) => ({
   title: rock.title,
   description: rock.description,
   owner: rock.owner,
-  dueDate: rock.due_date,
+  dueDate: rock.due_date, // Database stores as due_date, frontend expects dueDate
   priority: rock.priority || 'medium',
   progress: rock.progress
 });
@@ -68,7 +68,7 @@ const mapIssueToBackend = (issue) => ({
   title: issue.title,
   description: issue.description || '',
   priority: issue.priority,
-  assignee: issue.owner || '',
+  assignee: issue.owner || '', // Backend expects 'assignee', frontend uses 'owner'
   status: issue.status || 'identified'
 });
 
@@ -90,8 +90,8 @@ const mapPersonToBackend = (person) => ({
   role: person.role,
   seat: person.seat,
   department: person.department || '',
-  get_it: person.getIt || false,
-  want_it: person.wantIt || false,
+  getIt: person.getIt || false, // Backend expects camelCase
+  wantIt: person.wantIt || false, // Backend expects camelCase  
   capacity: person.capacity || false
 });
 
