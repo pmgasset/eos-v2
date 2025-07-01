@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 
-const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate }) => {
-  const [editingTarget, setEditingTarget] = useState(tenYearTarget);
+const OneYearPlanSection = ({ oneYearPlan, onUpdate, isActive, onActivate }) => {
+  const [editingPlan, setEditingPlan] = useState(oneYearPlan);
 
   const handleSave = () => {
-    onUpdate(editingTarget);
+    onUpdate(editingPlan);
     onActivate();
   };
 
   const handleCancel = () => {
-    setEditingTarget(tenYearTarget);
+    setEditingPlan(oneYearPlan);
     onActivate();
   };
 
-  const isEmpty = !tenYearTarget;
+  const isEmpty = !oneYearPlan;
   const currentYear = new Date().getFullYear();
-  const targetYear = currentYear + 10;
+  const nextYear = currentYear + 1;
 
   return (
     <div className="vto-section">
@@ -25,7 +25,7 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
         style={{ cursor: 'pointer' }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <h4 style={{ margin: 0 }}>10-Year Target</h4>
+          <h4 style={{ margin: 0 }}>1-Year Plan</h4>
           {isEmpty && <span className="empty-indicator">Empty</span>}
           {!isEmpty && <span className="completion-indicator">Complete</span>}
         </div>
@@ -39,9 +39,9 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
             lineHeight: '1.4',
             color: '#333'
           }}>
-            {tenYearTarget.length > 150 
-              ? `${tenYearTarget.substring(0, 150)}...` 
-              : tenYearTarget
+            {oneYearPlan.length > 150 
+              ? `${oneYearPlan.substring(0, 150)}...` 
+              : oneYearPlan
             }
           </div>
         </div>
@@ -50,10 +50,10 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
       {!isActive && isEmpty && (
         <div className="vto-section-empty">
           <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
-            Create an inspiring, specific goal for where you'll be in {targetYear}.
+            Define your key priorities and goals for {nextYear}.
           </div>
           <div style={{ fontSize: '0.8rem', color: '#999' }}>
-            Click to define your 10-year target
+            Click to create your 1-year plan
           </div>
         </div>
       )}
@@ -61,8 +61,8 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
       {isActive && (
         <div className="vto-section-content">
           <div style={{ marginBottom: '1.5rem', fontSize: '0.9rem', color: '#666' }}>
-            Your 10-Year Target is a long-term goal that excites and inspires your entire organization. 
-            It should be specific, measurable, and compelling enough to energize everyone for the journey ahead.
+            Your 1-Year Plan defines what you must accomplish this year to stay on track 
+            toward your 3-Year Picture and 10-Year Target. Focus on the vital few priorities.
           </div>
 
           <div style={{ marginBottom: '1.5rem' }}>
@@ -72,13 +72,13 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
               marginBottom: '0.5rem',
               color: '#333'
             }}>
-              10-Year Target (By {targetYear})
+              1-Year Plan ({nextYear} Priorities)
             </label>
             <textarea
-              value={editingTarget}
-              onChange={(e) => setEditingTarget(e.target.value)}
-              placeholder={`Where do you see your company in ${targetYear}? Include revenue goals, market position, team size, geographic reach, or impact metrics.`}
-              rows={4}
+              value={editingPlan}
+              onChange={(e) => setEditingPlan(e.target.value)}
+              placeholder={`What are the 3-7 most important things you must accomplish in ${nextYear}? Include revenue goals, key initiatives, team development, and operational improvements.`}
+              rows={6}
               style={{
                 width: '100%',
                 padding: '0.75rem',
@@ -97,45 +97,49 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
             borderRadius: '6px',
             marginBottom: '1rem'
           }}>
-            <h5 style={{ margin: '0 0 0.5rem 0', color: '#1976d2' }}>10-Year Target Framework:</h5>
+            <h5 style={{ margin: '0 0 0.5rem 0', color: '#1976d2' }}>1-Year Plan Categories:</h5>
             <div style={{ fontSize: '0.8rem', color: '#666', lineHeight: '1.4' }}>
-              <strong>SPECIFIC:</strong> Clear, concrete numbers and descriptions<br/>
-              <strong>MEASURABLE:</strong> Include quantifiable metrics<br/>
-              <strong>INSPIRING:</strong> Exciting enough to motivate your team<br/>
-              <strong>ACHIEVABLE:</strong> Ambitious but realistic<br/>
-              <strong>ALIGNED:</strong> Supports your Core Focus and Values
+              <strong>Revenue/Financial:</strong> What are your revenue and profit goals?<br/>
+              <strong>People:</strong> Who do you need to hire? What training is needed?<br/>
+              <strong>Marketing:</strong> What marketing initiatives will drive growth?<br/>
+              <strong>Operations:</strong> What systems need to be improved or implemented?<br/>
+              <strong>Product/Service:</strong> What offerings will you launch or improve?<br/>
+              <strong>Culture:</strong> How will you strengthen your team and culture?
             </div>
           </div>
 
-          {/* Examples */}
+          {/* Example */}
           <div style={{ 
             padding: '1rem',
             backgroundColor: '#e8f5e8',
             borderRadius: '6px',
             marginBottom: '1rem'
           }}>
-            <h5 style={{ margin: '0 0 0.5rem 0', color: '#2e7d32' }}>Example 10-Year Targets:</h5>
+            <h5 style={{ margin: '0 0 0.5rem 0', color: '#2e7d32' }}>Example 1-Year Plan:</h5>
             <div style={{ fontSize: '0.8rem', color: '#666', lineHeight: '1.4' }}>
-              <strong>Software Company:</strong><br/>
-              "By {targetYear}, we'll be the leading project management platform for creative agencies, serving 50,000+ companies globally with $100M annual recurring revenue and 500 team members across 3 continents."<br/><br/>
-              
-              <strong>Service Business:</strong><br/>
-              "By {targetYear}, we'll be the premier marketing agency for B2B SaaS companies in North America, generating $25M annually while helping 1,000+ clients achieve their growth goals with our team of 100 experts."
+              <strong>{nextYear} Priorities:</strong><br/>
+              • Achieve $5M revenue with 15% profit margin<br/>
+              • Hire 8 new team members (2 sales, 3 operations, 3 support)<br/>
+              • Launch new premium service line<br/>
+              • Implement CRM and project management systems<br/>
+              • Open second office location<br/>
+              • Achieve 95% customer satisfaction rating<br/>
+              • Complete leadership development program for all managers
             </div>
           </div>
 
-          {/* Connection to Vision */}
+          {/* Connection to Rocks */}
           <div style={{ 
             padding: '1rem',
             backgroundColor: '#fff3e0',
             borderRadius: '6px',
             marginBottom: '1rem'
           }}>
-            <h5 style={{ margin: '0 0 0.5rem 0', color: '#f57c00' }}>🎯 Connecting Vision to Target:</h5>
+            <h5 style={{ margin: '0 0 0.5rem 0', color: '#f57c00' }}>💡 From Plan to Rocks:</h5>
             <div style={{ fontSize: '0.8rem', color: '#666', lineHeight: '1.4' }}>
-              Your 10-Year Target should be the quantified expression of your Core Focus. 
-              It takes your Purpose and Niche and gives them specific, measurable form. 
-              This target becomes the North Star that guides all shorter-term planning.
+              Your 1-Year Plan should drive your quarterly Rocks (90-day priorities). 
+              Each quarter, select 3-7 Rocks that move you closer to achieving your annual plan. 
+              This creates a clear connection from your long-term vision to your daily actions.
             </div>
           </div>
 
@@ -146,14 +150,14 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
             borderRadius: '6px',
             marginBottom: '1rem'
           }}>
-            <h5 style={{ margin: '0 0 0.5rem 0', color: '#7b1fa2' }}>💡 10-Year Target Tips:</h5>
+            <h5 style={{ margin: '0 0 0.5rem 0', color: '#7b1fa2' }}>🎯 1-Year Plan Tips:</h5>
             <ul style={{ fontSize: '0.8rem', color: '#666', margin: '0', paddingLeft: '1rem' }}>
-              <li>Include specific numbers (revenue, customers, employees, locations)</li>
-              <li>Make it exciting - people should get energized when they hear it</li>
-              <li>Keep it to 1-2 sentences maximum</li>
-              <li>Test it: Can everyone remember and repeat it?</li>
-              <li>Make sure it aligns with your Core Focus</li>
-              <li>Update it only when fundamentally necessary</li>
+              <li>Limit to 3-7 key priorities - focus on the vital few</li>
+              <li>Make sure each priority moves you toward your 3-Year Picture</li>
+              <li>Include specific, measurable goals</li>
+              <li>Balance different areas: revenue, people, systems, culture</li>
+              <li>Review and update quarterly as you set new Rocks</li>
+              <li>Make sure priorities can realistically be achieved</li>
             </ul>
           </div>
 
@@ -162,7 +166,7 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
               Cancel
             </button>
             <button onClick={handleSave} className="btn btn-primary">
-              Save 10-Year Target
+              Save 1-Year Plan
             </button>
           </div>
         </div>
@@ -171,4 +175,4 @@ const TenYearTargetSection = ({ tenYearTarget, onUpdate, isActive, onActivate })
   );
 };
 
-export default TenYearTargetSection;
+export default OneYearPlanSection;
