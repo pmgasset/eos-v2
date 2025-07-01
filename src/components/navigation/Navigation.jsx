@@ -18,7 +18,7 @@ const Navigation = () => {
   return (
     <nav className="eos-nav">
       <div className="nav-brand">
-        <h1>🎯 EOS Platform</h1>
+        <h1>HeptagonIT EOS Platform</h1>
         <div className={`api-status ${apiStatus}`}>
           <span>{apiStatus === 'connected' ? '🟢' : apiStatus === 'error' ? '🔴' : '🟡'}</span>
           <span>{apiStatus}</span>
