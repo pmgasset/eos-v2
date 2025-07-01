@@ -1,232 +1,351 @@
-import React, { useState } from 'react';
-import { useEOS } from '../../context/EOSContext';
-import CoreValuesSection from './CoreValuesSection';
-import CoreFocusSection from './CoreFocusSection';
-import TenYearTargetSection from './TenYearTargetSection';
-import MarketingStrategySection from './MarketingStrategySection';
-import ThreeYearPictureSection from './ThreeYearPictureSection';
-import OneYearPlanSection from './OneYearPlanSection';
+/* VTO Container */
+.vto {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
 
-const VTO = () => {
-  const { visionData, updateVision } = useEOS();
-  const [activeSection, setActiveSection] = useState(null);
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+/* Header - Override global section-header for VTO */
+.vto .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
 
-  const handleSectionUpdate = async (section, data) => {
-    const updatedVision = {
-      ...visionData,
-      [section]: data
-    };
-    
-    try {
-      await updateVision(updatedVision);
-      setHasUnsavedChanges(false);
-    } catch (error) {
-      console.error('Error updating vision:', error);
-    }
-  };
+.vto .section-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 700;
+}
 
-  const getCompletionStatus = () => {
-    const sections = [
-      { name: 'Core Values', data: visionData.coreValues, isEmpty: !visionData.coreValues || visionData.coreValues.length === 0 },
-      { name: 'Core Focus', data: visionData.coreFocus, isEmpty: !visionData.coreFocus?.purpose && !visionData.coreFocus?.niche },
-      { name: '10-Year Target', data: visionData.tenYearTarget, isEmpty: !visionData.tenYearTarget },
-      { name: 'Marketing Strategy', data: visionData.marketingStrategy, isEmpty: !visionData.marketingStrategy },
-      { name: '3-Year Picture', data: visionData.threeYearPicture, isEmpty: !visionData.threeYearPicture },
-      { name: '1-Year Plan', data: visionData.oneYearPlan, isEmpty: !visionData.oneYearPlan }
-    ];
+/* VTO Grid Layout */
+.vto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
 
-    const completed = sections.filter(s => !s.isEmpty).length;
-    const total = sections.length;
-    
-    return { completed, total, sections };
-  };
+.vto-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-  const completionStatus = getCompletionStatus();
-  const completionPercentage = Math.round((completionStatus.completed / completionStatus.total) * 100);
+.column-header {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
 
-  return (
-    <div className="vto">
-      <div className="section-header">
-        <h2>Vision/Traction Organizer (V/TO)</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>
-            Vision Complete: {completionStatus.completed}/{completionStatus.total} sections
-          </div>
-          <div style={{
-            width: '100px',
-            height: '8px',
-            backgroundColor: '#e0e0e0',
-            borderRadius: '4px',
-            overflow: 'hidden'
-          }}>
-            <div style={{
-              width: `${completionPercentage}%`,
-              height: '100%',
-              backgroundColor: completionPercentage >= 100 ? '#4caf50' : 
-                             completionPercentage >= 70 ? '#ff9800' : '#f44336',
-              transition: 'width 0.3s ease'
-            }} />
-          </div>
-          <span style={{ 
-            fontSize: '0.9rem', 
-            fontWeight: 'bold',
-            color: completionPercentage >= 100 ? '#4caf50' : 
-                   completionPercentage >= 70 ? '#ff9800' : '#f44336'
-          }}>
-            {completionPercentage}%
-          </span>
-        </div>
-      </div>
+.vto-vision .column-header {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 1px solid #2196f3;
+}
 
-      {/* V/TO Introduction */}
-      {completionPercentage < 50 && (
-        <div style={{
-          padding: '1.5rem',
-          backgroundColor: '#f0f8ff',
-          border: '1px solid #2196f3',
-          borderRadius: '8px',
-          marginBottom: '2rem'
-        }}>
-          <h3 style={{ margin: '0 0 1rem 0', color: '#1976d2' }}>
-            🎯 Welcome to the Vision/Traction Organizer
-          </h3>
-          <p style={{ margin: '0 0 1rem 0', color: '#666' }}>
-            The V/TO is your company's strategic foundation. It clarifies where you're going and how you'll get there.
-            Complete each section to create a compelling vision that drives everything in your organization.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', fontSize: '0.9rem' }}>
-            <div>
-              <strong style={{ color: '#1976d2' }}>Vision Side (Where you're going):</strong>
-              <ul style={{ margin: '0.5rem 0 0 1rem', color: '#666' }}>
-                <li>Core Values - Your fundamental beliefs</li>
-                <li>Core Focus - Your purpose and niche</li>
-                <li>10-Year Target - Your big inspiring goal</li>
-              </ul>
-            </div>
-            <div>
-              <strong style={{ color: '#1976d2' }}>Traction Side (How you'll get there):</strong>
-              <ul style={{ margin: '0.5rem 0 0 1rem', color: '#666' }}>
-                <li>Marketing Strategy - How you'll reach customers</li>
-                <li>3-Year Picture - Clear 3-year vision</li>
-                <li>1-Year Plan - This year's priorities</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      )}
+.vto-traction .column-header {
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  border: 1px solid #9c27b0;
+}
 
-      {/* V/TO Grid Layout */}
-      <div className="vto-grid">
-        {/* Left Column - Vision Side */}
-        <div className="vto-column vto-vision">
-          <div className="column-header">
-            <h3>👁️ Vision (Where you're going)</h3>
-            <div style={{ fontSize: '0.8rem', color: '#666' }}>
-              Your company's purpose and long-term direction
-            </div>
-          </div>
+.column-header h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
 
-          <CoreValuesSection
-            coreValues={visionData.coreValues || []}
-            onUpdate={(data) => handleSectionUpdate('coreValues', data)}
-            isActive={activeSection === 'coreValues'}
-            onActivate={() => setActiveSection(activeSection === 'coreValues' ? null : 'coreValues')}
-          />
+/* VTO Sections */
+.vto-section {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
 
-          <CoreFocusSection
-            coreFocus={visionData.coreFocus || { purpose: '', niche: '' }}
-            onUpdate={(data) => handleSectionUpdate('coreFocus', data)}
-            isActive={activeSection === 'coreFocus'}
-            onActivate={() => setActiveSection(activeSection === 'coreFocus' ? null : 'coreFocus')}
-          />
+.vto-section:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
-          <TenYearTargetSection
-            tenYearTarget={visionData.tenYearTarget || ''}
-            onUpdate={(data) => handleSectionUpdate('tenYearTarget', data)}
-            isActive={activeSection === 'tenYearTarget'}
-            onActivate={() => setActiveSection(activeSection === 'tenYearTarget' ? null : 'tenYearTarget')}
-          />
-        </div>
+.vto-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  user-select: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
 
-        {/* Right Column - Traction Side */}
-        <div className="vto-column vto-traction">
-          <div className="column-header">
-            <h3>⚡ Traction (How you'll get there)</h3>
-            <div style={{ fontSize: '0.8rem', color: '#666' }}>
-              Your execution plan and near-term focus
-            </div>
-          </div>
+.vto-section-header:hover {
+  background: #e9ecef;
+}
 
-          <MarketingStrategySection
-            marketingStrategy={visionData.marketingStrategy || ''}
-            onUpdate={(data) => handleSectionUpdate('marketingStrategy', data)}
-            isActive={activeSection === 'marketingStrategy'}
-            onActivate={() => setActiveSection(activeSection === 'marketingStrategy' ? null : 'marketingStrategy')}
-          />
+.vto-section-header h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
 
-          <ThreeYearPictureSection
-            threeYearPicture={visionData.threeYearPicture || ''}
-            onUpdate={(data) => handleSectionUpdate('threeYearPicture', data)}
-            isActive={activeSection === 'threeYearPicture'}
-            onActivate={() => setActiveSection(activeSection === 'threeYearPicture' ? null : 'threeYearPicture')}
-          />
+.expand-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #666;
+  transition: transform 0.2s ease;
+  min-width: 20px;
+  text-align: center;
+}
 
-          <OneYearPlanSection
-            oneYearPlan={visionData.oneYearPlan || ''}
-            onUpdate={(data) => handleSectionUpdate('oneYearPlan', data)}
-            isActive={activeSection === 'oneYearPlan'}
-            onActivate={() => setActiveSection(activeSection === 'oneYearPlan' ? null : 'oneYearPlan')}
-          />
-        </div>
-      </div>
+/* Status Indicators */
+.empty-indicator {
+  background: #ffebee;
+  color: #c62828;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
 
-      {/* Vision Summary */}
-      {completionPercentage >= 70 && (
-        <div style={{
-          marginTop: '2rem',
-          padding: '1.5rem',
-          backgroundColor: '#e8f5e8',
-          border: '1px solid #4caf50',
-          borderRadius: '8px'
-        }}>
-          <h3 style={{ margin: '0 0 1rem 0', color: '#2e7d32' }}>
-            ✅ Vision Summary
-          </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', fontSize: '0.9rem' }}>
-            <div>
-              <strong style={{ color: '#2e7d32' }}>Core Focus:</strong>
-              <div style={{ color: '#666', marginBottom: '1rem' }}>
-                {visionData.coreFocus?.purpose && visionData.coreFocus?.niche 
-                  ? `${visionData.coreFocus.purpose} for ${visionData.coreFocus.niche}`
-                  : 'Not yet defined'
-                }
-              </div>
-              
-              <strong style={{ color: '#2e7d32' }}>Core Values:</strong>
-              <div style={{ color: '#666' }}>
-                {visionData.coreValues && visionData.coreValues.length > 0
-                  ? visionData.coreValues.map(v => v.name).join(', ')
-                  : 'Not yet defined'
-                }
-              </div>
-            </div>
-            <div>
-              <strong style={{ color: '#2e7d32' }}>10-Year Target:</strong>
-              <div style={{ color: '#666', marginBottom: '1rem' }}>
-                {visionData.tenYearTarget || 'Not yet defined'}
-              </div>
-              
-              <strong style={{ color: '#2e7d32' }}>This Year's Focus:</strong>
-              <div style={{ color: '#666' }}>
-                {visionData.oneYearPlan || 'Not yet defined'}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+.partial-indicator {
+  background: #fff3e0;
+  color: #ef6c00;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
 
-export default VTO;
+.completion-indicator {
+  background: #e8f5e8;
+  color: #2e7d32;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Section Content */
+.vto-section-preview {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f0f0f0;
+  background: white;
+}
+
+.vto-section-empty {
+  padding: 1rem 1.25rem;
+  background: #fafafa;
+}
+
+.vto-section-content {
+  padding: 1.5rem 1.25rem;
+  background: white;
+}
+
+/* Form Elements - VTO specific to avoid conflicts */
+.vto-section-content input,
+.vto-section-content textarea,
+.vto-section-content select {
+  font-family: inherit;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.vto-section-content input:focus,
+.vto-section-content textarea:focus,
+.vto-section-content select:focus {
+  outline: none;
+  border-color: #2196f3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.vto-section-content input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+.vto-section-content textarea {
+  width: 100%;
+  padding: 0.75rem;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.vto-section-content label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons - VTO specific */
+.vto-section-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.vto-section-actions .btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.vto-section-actions .btn-primary {
+  background: #2196f3;
+  color: white;
+}
+
+.vto-section-actions .btn-primary:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+.vto-section-actions .btn-secondary {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.vto-section-actions .btn-secondary:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* Info boxes */
+.vto-section-content > div[style*="padding: 1rem"] {
+  margin: 1rem 0;
+  border-radius: 6px;
+  border-left: 4px solid;
+}
+
+/* Core Values specific styling */
+.vto-section-content h5 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.vto-section-content ul {
+  margin: 0;
+  padding-left: 1rem;
+  line-height: 1.5;
+}
+
+.vto-section-content ul li {
+  margin-bottom: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .vto {
+    padding: 1rem;
+  }
+  
+  .vto-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .vto .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .vto .section-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .vto-section-content {
+    padding: 1rem;
+  }
+  
+  .vto-section-actions {
+    flex-direction: column;
+  }
+  
+  .vto-section-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .column-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .vto-section-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .vto-section-header h4 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .vto {
+    padding: 0.5rem;
+  }
+
+  .vto-section-content {
+    padding: 0.75rem;
+  }
+
+  .vto .section-header {
+    margin-bottom: 1rem;
+  }
+
+  .vto .section-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Progress bar styling */
+.vto .section-header div[style*="width: 100px"] {
+  flex-shrink: 0;
+}
+
+/* Ensure proper spacing for intro section */
+.vto > div[style*="padding: 1.5rem"] {
+  margin-bottom: 2rem;
+}
+
+/* Fix any text overflow issues */
+.vto-section-preview div {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.vto-section-empty div {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}

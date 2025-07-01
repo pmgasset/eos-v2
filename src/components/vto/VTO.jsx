@@ -6,6 +6,7 @@ import TenYearTargetSection from './TenYearTargetSection';
 import MarketingStrategySection from './MarketingStrategySection';
 import ThreeYearPictureSection from './ThreeYearPictureSection';
 import OneYearPlanSection from './OneYearPlanSection';
+import '../../styles/VTO.css';
 
 const VTO = () => {
   const { visionData, updateVision } = useEOS();
@@ -49,8 +50,8 @@ const VTO = () => {
     <div className="vto">
       <div className="section-header">
         <h2>Vision/Traction Organizer (V/TO)</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ fontSize: '0.9rem', color: '#666' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ fontSize: '0.9rem', color: '#666', whiteSpace: 'nowrap' }}>
             Vision Complete: {completionStatus.completed}/{completionStatus.total} sections
           </div>
           <div style={{
@@ -58,7 +59,8 @@ const VTO = () => {
             height: '8px',
             backgroundColor: '#e0e0e0',
             borderRadius: '4px',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            flexShrink: 0
           }}>
             <div style={{
               width: `${completionPercentage}%`,
@@ -72,7 +74,8 @@ const VTO = () => {
             fontSize: '0.9rem', 
             fontWeight: 'bold',
             color: completionPercentage >= 100 ? '#4caf50' : 
-                   completionPercentage >= 70 ? '#ff9800' : '#f44336'
+                   completionPercentage >= 70 ? '#ff9800' : '#f44336',
+            whiteSpace: 'nowrap'
           }}>
             {completionPercentage}%
           </span>
@@ -95,7 +98,12 @@ const VTO = () => {
             The V/TO is your company's strategic foundation. It clarifies where you're going and how you'll get there.
             Complete each section to create a compelling vision that drives everything in your organization.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', fontSize: '0.9rem' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '1rem', 
+            fontSize: '0.9rem' 
+          }}>
             <div>
               <strong style={{ color: '#1976d2' }}>Vision Side (Where you're going):</strong>
               <ul style={{ margin: '0.5rem 0 0 1rem', color: '#666' }}>
@@ -193,7 +201,12 @@ const VTO = () => {
           <h3 style={{ margin: '0 0 1rem 0', color: '#2e7d32' }}>
             ✅ Vision Summary
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', fontSize: '0.9rem' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+            gap: '1.5rem', 
+            fontSize: '0.9rem' 
+          }}>
             <div>
               <strong style={{ color: '#2e7d32' }}>Core Focus:</strong>
               <div style={{ color: '#666', marginBottom: '1rem' }}>
